@@ -3,7 +3,7 @@
 Folio Library is a local academic demo built with TypeScript, Node.js and SQLite. It tracks a library catalog, member records, and loans for physical copies.
 
 # Live Demo
-View Folio Library
+[View Folio Library](https://digital-library12.netlify.app/login)
 
 ## Start on your Mac
 
