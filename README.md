@@ -2,6 +2,9 @@
 
 Folio Library is a local academic demo built with TypeScript, Node.js and SQLite. It tracks a library catalog, member records, and loans for physical copies.
 
+# Live Demo
+View Folio Library
+
 ## Start on your Mac
 
 Requires Node.js 24 or newer. Local mode uses Node’s built-in SQLite. Netlify installs the Turso client from the lockfile.
