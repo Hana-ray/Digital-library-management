@@ -1,0 +1,51 @@
+PRAGMA foreign_keys = ON;
+PRAGMA busy_timeout = 5000;
+
+CREATE TABLE IF NOT EXISTS books (
+  id INTEGER PRIMARY KEY,
+  title TEXT NOT NULL,
+  author TEXT NOT NULL,
+  category TEXT NOT NULL,
+  copies INTEGER NOT NULL CHECK (copies BETWEEN 1 AND 999)
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS members (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL COLLATE NOCASE UNIQUE
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS loans (
+  id INTEGER PRIMARY KEY,
+  book_id INTEGER NOT NULL REFERENCES books(id),
+  member_id INTEGER NOT NULL REFERENCES members(id),
+  borrowed_on TEXT NOT NULL,
+  due_on TEXT NOT NULL,
+  returned_on TEXT
+) STRICT;
+
+CREATE INDEX IF NOT EXISTS active_book_loans ON loans(book_id) WHERE returned_on IS NULL;
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id TEXT PRIMARY KEY, csrf TEXT NOT NULL, expires INTEGER NOT NULL
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS reservations (
+  id INTEGER PRIMARY KEY,
+  book_id INTEGER NOT NULL REFERENCES books(id),
+  member_id INTEGER NOT NULL REFERENCES members(id),
+  created_on TEXT NOT NULL,
+  UNIQUE(book_id, member_id)
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS member_accounts (
+  member_id INTEGER PRIMARY KEY REFERENCES members(id) ON DELETE CASCADE,
+  password_key TEXT NOT NULL
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS member_sessions (
+  id TEXT PRIMARY KEY,
+  member_id INTEGER NOT NULL REFERENCES member_accounts(member_id) ON DELETE CASCADE,
+  csrf TEXT NOT NULL,
+  expires INTEGER NOT NULL
+) STRICT;
